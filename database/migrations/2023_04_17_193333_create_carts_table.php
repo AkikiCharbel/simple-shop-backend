@@ -20,6 +20,7 @@ return new class extends Migration
                 ->onDelete('cascade')->nullOnDelete();
             $table->timestamp('submitted_at');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

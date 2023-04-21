@@ -11,10 +11,10 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
 /**
- * @property integer $id
+ * @property int $id
  * @property string $name
  * @property string $email
- * @property boolean $is_admin
+ * @property bool $is_admin
  * @property Carbon $created_at
  * @property Carbon $updated_at
  */
@@ -51,6 +51,9 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'created_at' => 'datetime:Y-m-d H:i:s',
+        'updated_at' => 'datetime:Y-m-d H:i:s',
+        'is_admin' => 'boolean'
     ];
 
     public function carts(): HasMany

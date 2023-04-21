@@ -8,10 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
- * @property integer $id
+ * @property int $id
  * @property string $name
- * @property integer $quantity
- * @property integer $price
+ * @property int $quantity
+ * @property int $price
  * @property Carbon $created_at
  * @property Carbon $updated_at
  */
@@ -27,7 +27,7 @@ class Product extends Model
 
     public function carts(): BelongsToMany
     {
-        return $this->belongsToMany(Cart::class)
+        return $this->belongsToMany(Cart::class, 'cart_products')
             ->withPivot('quantity')
             ->withTimestamps();
     }
