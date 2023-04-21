@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property int $id
+ * @property int $total_price
  * @property User $user
  * @property Carbon $submitted_at
  * @property Carbon $created_at
@@ -33,8 +34,8 @@ class Cart extends Model
 
     public function products(): BelongsToMany
     {
-        return $this->belongsToMany(Product::class)
-            ->withPivot('quantity', 'cart_products')
+        return $this->belongsToMany(Product::class, 'cart_products')
+            ->withPivot('quantity')
             ->withTimestamps();
     }
 }

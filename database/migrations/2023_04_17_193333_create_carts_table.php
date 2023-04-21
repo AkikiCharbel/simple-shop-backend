@@ -18,7 +18,8 @@ return new class extends Migration
                 ->references('id')
                 ->on('users')
                 ->onDelete('cascade')->nullOnDelete();
-            $table->timestamp('submitted_at');
+            $table->integer('total_price')->nullable();
+            $table->timestamp('submitted_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

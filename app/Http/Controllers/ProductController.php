@@ -18,9 +18,12 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): DataCollection|CursorPaginatedDataCollection|PaginatedDataCollection
+    public function index(Request $request): DataCollection|CursorPaginatedDataCollection|PaginatedDataCollection
     {
-        return ProductData::collection(Product::all());
+        return ProductData::collection(
+            Product::query()
+                ->paginate($request->input('limit', 5))
+        );
     }
 
     public function addToCart(Request $request, Product $product): JsonResponse
@@ -28,18 +31,14 @@ class ProductController extends Controller
         /** @var User $user */
         $user = auth()->user();
 
-        if(!$user->carts()->exists()){
+        if (! $user->carts()->exists()) {
             $user->carts()->create();
         }
         /** @var Cart $cart */
         $cart = $user->carts()->first();
 
-        if (!$cart->products()->where('id', $product->id)->exists()){
+        if (! $cart->products()->where('products.id', $product->id)->exists()) {
             $cart->products()->attach($product->id, ['quantity' => 1]);
-        }else{
-            $cart->products()
-                ->where('product_id', $product->id)
-                ->increment('quantity', 1);
         }
 
         return response()->json([

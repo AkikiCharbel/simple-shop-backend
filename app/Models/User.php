@@ -53,7 +53,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'created_at' => 'datetime:Y-m-d H:i:s',
         'updated_at' => 'datetime:Y-m-d H:i:s',
-        'is_admin' => 'boolean'
+        'is_admin' => 'boolean',
     ];
 
     public function carts(): HasMany
