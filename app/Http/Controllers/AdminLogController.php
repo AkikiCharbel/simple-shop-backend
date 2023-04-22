@@ -10,6 +10,8 @@ use Spatie\Activitylog\Models\Activity;
 use Spatie\LaravelData\CursorPaginatedDataCollection;
 use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\PaginatedDataCollection;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 use Symfony\Component\HttpFoundation\Response;
 
 class AdminLogController extends Controller
@@ -19,7 +21,11 @@ class AdminLogController extends Controller
      */
     public function index(Request $request): DataCollection|CursorPaginatedDataCollection|PaginatedDataCollection
     {
-        return LogsData::collection(Activity::query()->with('causer')->get());
+        $logs = QueryBuilder::for(Activity::class)
+            ->with('causer')
+            ->allowedFilters([AllowedFilter::exact('event')])
+            ->get();
+        return LogsData::collection($logs);
     }
 
     public function logsActions(Request $request): JsonResponse

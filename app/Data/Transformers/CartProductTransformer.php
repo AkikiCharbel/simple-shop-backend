@@ -17,7 +17,7 @@ class CartProductTransformer implements Transformer
             $value = json_decode($value, true);
 
         if (isset($value['cart_model']) && $value['cart_model'] == Cart::class && isset($value['cart_id'])) {
-            $cart = Cart::query()->find($value['cart_id']);
+            $cart = Cart::withTrashed()->find($value['cart_id']);
             $var['cart'] = CartData::from($cart)->except('products');
         }
 
