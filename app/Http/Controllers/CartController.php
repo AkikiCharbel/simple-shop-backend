@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Data\Resource\CartData;
+use App\Enums\LogActionsEnum;
 use App\Models\Cart;
 use App\Models\Product;
 use App\Models\User;
@@ -17,12 +18,16 @@ class CartController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(): CartData
+    public function show(): CartData|JsonResponse
     {
         /** @var User $user */
         $user = Auth::user();
 
-        return CartData::from($user->carts()->first());
+        if ($user->carts()->first() != null) {
+            return CartData::from($user->carts()->first());
+        }
+
+        return response()->json(null, Response::HTTP_ACCEPTED);
     }
 
     public function removeFromCart(Cart $cart, Product $product, Request $request): JsonResponse
@@ -38,6 +43,18 @@ class CartController extends Controller
         }
 
         $cart->products()->detach($product->id);
+
+        $logDescription = [
+            'cart_model' => Cart::class,
+            'cart_id' => $cart->id,
+            'product_model' => Product::class,
+            'product_id' => $product->id,
+        ];
+        activity()
+            ->causedBy($user)
+            ->performedOn($cart)
+            ->event(LogActionsEnum::REMOVED_PRODUCT->name)
+            ->log(json_encode($logDescription));
 
         return response()->json([
             'status' => Response::HTTP_ACCEPTED,
@@ -56,6 +73,17 @@ class CartController extends Controller
         $cart->total_price = (int) $totalPrice;
         $cart->save();
         $cart->delete();
+
+        $logDescription = [
+            'cart_model' => Cart::class,
+            'cart_id' => $cart->id,
+        ];
+
+        activity()
+            ->causedBy($user)
+            ->performedOn($cart)
+            ->event(LogActionsEnum::CHECKED_OUT_CART->name)
+            ->log(json_encode($logDescription));
 
         return response()->json([
             'status' => Response::HTTP_ACCEPTED,

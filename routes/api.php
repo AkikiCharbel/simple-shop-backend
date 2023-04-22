@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminLogController;
 use App\Http\Controllers\AuthenticatedSessionController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProductController;
@@ -31,6 +32,11 @@ Route::middleware('auth:sanctum')->group(function () {
        Route::get('/', [CartController::class, 'show'])->name('cart.show');
        Route::post('/remove-from-cart/{cart}/{product}', [CartController::class, 'removeFromCart'])->name('cart.removeFromCart');
        Route::post('/buy/{cart}', [CartController::class, 'buy'])->name('cart.buy');
+    });
+
+    Route::prefix('/logs')->middleware('admin')->group(function () {
+        Route::get('/', [AdminLogController::class, 'index'])->name('logs.index');
+        Route::get('/actions', [AdminLogController::class, 'logsActions'])->name('logs.actions');
     });
 });
 

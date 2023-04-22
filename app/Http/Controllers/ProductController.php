@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Data\Resource\ProductData;
+use App\Enums\LogActionsEnum;
 use App\Models\Cart;
 use App\Models\Product;
 use App\Models\User;
@@ -40,6 +41,18 @@ class ProductController extends Controller
         if (! $cart->products()->where('products.id', $product->id)->exists()) {
             $cart->products()->attach($product->id, ['quantity' => 1]);
         }
+
+        $logDescription = [
+            'cart_model' => Cart::class,
+            'cart_id' => $cart->id,
+            'product_model' => Product::class,
+            'product_id' => $product->id,
+        ];
+        activity()
+            ->causedBy($user)
+            ->performedOn($cart)
+            ->event(LogActionsEnum::ADDED_PRODUCT->name)
+            ->log(json_encode($logDescription));
 
         return response()->json([
             'status' => Response::HTTP_ACCEPTED,
