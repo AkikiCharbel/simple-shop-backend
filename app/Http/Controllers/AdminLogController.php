@@ -25,7 +25,7 @@ class AdminLogController extends Controller
         $logs = QueryBuilder::for(Activity::class) // @phpstan-ignore-line
             ->with('causer')
             ->allowedFilters([AllowedFilter::exact('event')])
-            ->get();
+            ->paginate($request->input('limit', 5));
 
         return LogsData::collection($logs);
     }
