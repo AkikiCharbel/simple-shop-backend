@@ -2,10 +2,6 @@
 
 namespace App\Data\Transformers;
 
-use App\Data\Resource\CartData;
-use App\Data\Resource\ProductData;
-use App\Models\Cart;
-use App\Models\Product;
 use Spatie\LaravelData\Support\DataProperty;
 use Spatie\LaravelData\Transformers\Transformer;
 

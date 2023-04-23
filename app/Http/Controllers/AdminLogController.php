@@ -21,10 +21,12 @@ class AdminLogController extends Controller
      */
     public function index(Request $request): DataCollection|CursorPaginatedDataCollection|PaginatedDataCollection
     {
-        $logs = QueryBuilder::for(Activity::class)
+
+        $logs = QueryBuilder::for(Activity::class) // @phpstan-ignore-line
             ->with('causer')
             ->allowedFilters([AllowedFilter::exact('event')])
             ->get();
+
         return LogsData::collection($logs);
     }
 

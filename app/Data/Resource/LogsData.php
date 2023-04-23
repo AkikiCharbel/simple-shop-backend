@@ -6,11 +6,9 @@ use App\Data\Transformers\CartProductTransformer;
 use App\Data\Transformers\JsonTransformer;
 use Carbon\Carbon;
 use Spatie\Activitylog\Models\Activity;
-use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Attributes\MapOutputName;
 use Spatie\LaravelData\Attributes\WithTransformer;
 use Spatie\LaravelData\Data;
-use Spatie\LaravelData\Transformers\ArrayableTransformer;
 
 class LogsData extends Data
 {

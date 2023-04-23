@@ -29,3 +29,9 @@ This will start the Laravel development server and make the application availabl
 
 After following the steps above, you can access the application by visiting `http://localhost:8000` in your web browser.
 
+## Useful Command
+`composer run phpstan` phpstan will check the code for errors
+
+`composer run pint` pint will fix the code indentation 
+
+
